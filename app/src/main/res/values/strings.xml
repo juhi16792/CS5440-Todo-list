@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">ToDoList</string>
+    <!--items are added for category list that will be implemented by spinner-->
+    <string-array name="arraylist_category">
+        <item>all</item>
+        <item>place_to_visit</item>
+        <item>routine</item>
+        <item>official</item>
+        <item>medecines</item>
+    </string-array>
+</resources>

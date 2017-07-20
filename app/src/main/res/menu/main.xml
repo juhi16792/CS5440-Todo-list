@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!--menu for category-->
+<item android:id="@+id/item"
+    android:title="CLICK ME"
+    app:showAsAction="always"
+    android:orderInCategory="1"
+    android:visible="true">
+    <!-- "file" submenu -->
+    <menu>
+            <item
+                android:id="@+id/all"
+                android:title="All" />
+            <item
+                android:id="@+id/fav_place_to_visit"
+                android:title="place_to_visit" />
+            <item
+                android:id="@+id/routine"
+                android:title="routine" />
+            <item
+                android:id="@+id/official"
+                android:title="official" />
+            <item
+                android:id="@+id/medecines"
+                android:title="medecines" />
+        </menu>
+            </item>
+        </menu>
