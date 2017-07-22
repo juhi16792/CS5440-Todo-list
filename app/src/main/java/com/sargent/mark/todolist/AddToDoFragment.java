@@ -18,7 +18,7 @@ import java.util.Calendar;
  */
 
 public class AddToDoFragment extends DialogFragment{
-    //assigned variable for spinner that has been implemented in xml file
+
     private Spinner spinner;
     private EditText toDo;
     private DatePicker dp;
@@ -29,7 +29,7 @@ public class AddToDoFragment extends DialogFragment{
     }
 
     public interface OnDialogCloseListener {
-        //adding category in this method
+        //Adding CATEGORY here in this method.
         void closeDialog(int year, int month, int day, String description, String categories);
     }
 
@@ -37,8 +37,9 @@ public class AddToDoFragment extends DialogFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_to_do_adder, container, false);
         toDo = (EditText) view.findViewById(R.id.toDo);
-        //https://developer.android.com/guide/topics/ui/controls/spinner.html
-        //adding spinner inorder to select the category in the add todos page
+
+        //Adding spinner for category
+        //https://stackoverflow.com/questions/9406920/android-spinner-with-date-picker-like-google-calendar-app
         spinner = (Spinner) view.findViewById(R.id.categories);
         dp = (DatePicker) view.findViewById(R.id.datePicker);
         add = (Button) view.findViewById(R.id.add);
@@ -47,22 +48,22 @@ public class AddToDoFragment extends DialogFragment{
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
         dp.updateDate(year, month, day);
-        //https://developer.android.com/guide/topics/ui/controls/spinner.html
-        //supply the spinner with the array using an instance of ArrayAdapter:
-        // Create an ArrayAdapter using the string array and a default spinner layout
+
+        //https://developer.android.com/reference/android/widget/ArrayAdapter.html#ArrayAdapter%28android.content.Context,%20int,%20java.util.List%3CT%3E%29
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(),
                 R.array.arraylist_category, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
+        //https://developer.android.com/guide/topics/ui/controls/spinner.html
         spinner.setAdapter(adapter);
-
+//Referred from: https://www.codota.com/android/methods/android.widget.DatePicker/getMonth
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 OnDialogCloseListener activity = (OnDialogCloseListener) getActivity();
-                //adding spinner to get the selected category based on user selection
                 activity.closeDialog(dp.getYear(), dp.getMonth(), dp.getDayOfMonth(), toDo.getText().toString(),
+                        // Spinner mySpinner = (Spinner)findViewbyId(R.id.spinner);
+                        //int position = mySpinner.getSelectedItemPosition();
+                        //String Text = yourCityList[position].toString();
                         spinner.getSelectedItem().toString());
                 AddToDoFragment.this.dismiss();
             }

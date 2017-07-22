@@ -69,7 +69,9 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
                 int month = Integer.parseInt(dateInfo[1].replaceAll("\\s",""));
                 int day = Integer.parseInt(dateInfo[2].replaceAll("\\s",""));
                 FragmentManager fm = getSupportFragmentManager();
-                  //added category to the update function
+                  //To update function category added.
+                  //https://stackoverflow.com/questions/32996697/android-studio-fragment-onbuttonpressed-method
+                  //https://stackoverflow.com/questions/15137425/how-to-update-fragment-content-from-activity-viewpager
                   UpdateToDoFragment frag = UpdateToDoFragment.newInstance(year, month, day, description,
                           id, categories);
                 frag.show(fm, "updatetodofragment");
@@ -91,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
             }
         }).attachToRecyclerView(rv);
     }
-    //just included again the category
     @Override
     public void closeDialog(int year, int month, int day, String description, String categories) {
         addToDo(db, description, formatDate(year, month, day), categories);
@@ -101,44 +102,42 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
     public String formatDate(int year, int month, int day) {
         return String.format("%04d-%02d-%02d", year, month + 1, day);
     }
-    //the above method will get allthe items that are in the database
-    //i just implemented the new method to get the items based on particular category
+
+    //To get items based on particular category.
+    //http://techqa.info/programming/question/38923502/how-to-update-data-in-a-custom-dialog
     private Cursor getItems_categories(SQLiteDatabase db, String categories) {
         String selection;
         return db.query(
                 Contract.TABLE_TODO.TABLE_NAME,
                 null,
-                selection="categories='"+categories+"'",//mentioned the selection on which it has to be made
+                selection="categories='"+categories+"'",
+                //selectio which has to be made
                 null,
                 null,
                 null,
                 Contract.TABLE_TODO.COLUMN_NAME_DUE_DATE
         );
     }
-    //query(String table, String[] columns, String selection,
-    // String[] selectionArgs, String groupBy, String having, String orderBy)
-    // public ArrayList<ArrayList<String>> selectRecordsFromDBList(String tableName, String[] tableColumns,
-    //String whereClase, String whereArgs[], String groupBy,
-    //String having, String orderBy)
-    // took the reference from https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase.html#query(java.lang.String, java.lang.String[], java.lang.String,
-    // java.lang.String[], java.lang.String, java.lang.String, java.lang.String)
+    // https://stackoverflow.com/questions/1305272/get-all-item-from-cursor-in-android?rq=1
+    //To get all items in the category
+
         private Cursor getAllItems(SQLiteDatabase db) {
         return db.query(
                 Contract.TABLE_TODO.TABLE_NAME,//tablename
-                null,//table columns
+                null,//Table columns
                 null,//whereclause
                 null,//whereArgs[]
                 null,//groupBy
-                null,//having
-                Contract.TABLE_TODO.COLUMN_NAME_DUE_DATE//orderBY
+                null,
+                Contract.TABLE_TODO.COLUMN_NAME_DUE_DATE//OrderBY
         );
     }
-    //category is passed as an argument into tis method,inorder to added to database
+    //http://www.java2s.com/Code/Android/Database/Createdeleteupdate.htm
+    //Adding category to the datqbase
     private long addToDo(SQLiteDatabase db, String description, String duedate, String categories) {
         ContentValues cv = new ContentValues();
         cv.put(Contract.TABLE_TODO.COLUMN_NAME_DESCRIPTION, description);
         cv.put(Contract.TABLE_TODO.COLUMN_NAME_DUE_DATE, duedate);
-        // adding the category to database
         cv.put(Contract.TABLE_TODO.COLUMN_NAME_CATEGORIES, categories);
         return db.insert(Contract.TABLE_TODO.TABLE_NAME, null, cv);
     }
@@ -146,53 +145,43 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
         Log.d(TAG, "deleting id: " + id);
         return db.delete(Contract.TABLE_TODO.TABLE_NAME, Contract.TABLE_TODO._ID + "=" + id, null) > 0;
     }
-    // again adding the categories into this
     private int updateToDo(SQLiteDatabase db, int year, int month, int day, String description, long id, String categories){
         String duedate = formatDate(year, month - 1, day);
         ContentValues cv = new ContentValues();
         cv.put(Contract.TABLE_TODO.COLUMN_NAME_DESCRIPTION, description);
         cv.put(Contract.TABLE_TODO.COLUMN_NAME_DUE_DATE, duedate);
-        // again i am adding the categoriess
         cv.put(Contract.TABLE_TODO.COLUMN_NAME_CATEGORIES, categories);
         return db.update(Contract.TABLE_TODO.TABLE_NAME, cv, Contract.TABLE_TODO._ID + "=" + id, null);
     }
     @Override
     public void closeUpdateDialog(int year, int month, int day, String description, long id, String categories)
-    {//again adding categories
+    {
         updateToDo(db, year, month, day, description, id, categories);
-        //https://stackoverflow.com/questions/1985955/android-simplecursoradapter-doesnt-update-when-database-changes/12384208
-        //database
         adapter.swapCursor(getAllItems(db));
     }
-//implementing the method where the status of my checkbox is checked and it is updated to my sqlite database
-    //https://stackoverflow.com/questions/26190444/how-to-update-the-textview-text-depending-on-the-state-of-a-checkbox-in-listview
+//Method for getting status of checkbox updated in SQLlite database.
+//https://developer.android.com/reference/android/widget/CheckBox.html
     public static int ischeckBox_checked(SQLiteDatabase db,long id, boolean isChecked) {
         ContentValues cv = new ContentValues();
             if(isChecked) {
                 cv.put(Contract.TABLE_TODO.COLUMN_NAME_TASK, "done");
             }
+
             else
             {
-                //https://www.codeproject.com/Questions/1080701/How-to-create-function-in-database-for-updating-va
                 String notdone=" ";
                 cv.put(Contract.TABLE_TODO.COLUMN_NAME_TASK,notdone);
             }
         return db.update(Contract.TABLE_TODO.TABLE_NAME, cv, Contract.TABLE_TODO._ID + "=" + id, null);
     }
-    //https://developer.android.com/guide/topics/ui/menus.html
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         return true;
     }
-//https://stackoverflow.com/questions/6680570/android-oncreateoptionsmenu-item-action
-    //https://stackoverflow.com/questions/1985955/android-simplecursoradapter-doesnt-update-when-database-changes/12384208
-    //private Db mDbAdapter;
-    //private Cursor mCursor;
-    //private SimpleCursorAdapter mCursorAd;
-    //mCursor = mDbAdapter.getAllItems();
-    //mCursorAd.swapCursor(mCursor);
+//Referred by: https://stackoverflow.com/questions/7479992/handling-a-menu-item-click-event-android
+    //https://developer.android.com/guide/topics/ui/menus.html
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -201,21 +190,19 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
                 adapter.swapCursor(cursor);
                 return true;
             case R.id.fav_place_to_visit:
-                //getItems_categories has two arguments
-                //first is the database variable and second argument which i passed is particular category
-                cursor=getItems_categories(db,"place_to_visit");
+                cursor=getItems_categories(db,"Gym");
                 adapter.swapCursor(cursor);
                 return true;
             case R.id.routine:
-                cursor=getItems_categories(db,"routine");
+                cursor=getItems_categories(db,"Things_to_buy");
                 adapter.swapCursor(cursor);
                 return true;
             case R.id.official:
-                cursor=getItems_categories(db,"official");
+                cursor=getItems_categories(db,"Assigments_to_do");
                 adapter.swapCursor(cursor);
                 return true;
             case R.id.medecines:
-                cursor = getItems_categories(db,"medecines");
+                cursor = getItems_categories(db,"Travel_list");
                 adapter.swapCursor(cursor);
                 return true;
             default:

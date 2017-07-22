@@ -19,7 +19,7 @@ import android.widget.Spinner;
 public class UpdateToDoFragment extends DialogFragment {
 
     private EditText toDo;
-    private Spinner spinner;   //creating local variable for spinner
+    private Spinner spinner; // Here I have created new variable for SPINNER.
     private DatePicker dp;
     private Button add;
     private final String TAG = "updatetodofragment";
@@ -27,7 +27,8 @@ public class UpdateToDoFragment extends DialogFragment {
 
 
     public UpdateToDoFragment(){}
-        //adding categories
+        //adding categories!
+    // https://stackoverflow.com/questions/18334063/update-fragment-data-after-newinstance
     public static UpdateToDoFragment newInstance(int year, int month, int day, String description,
                                                  long id, String categories) {
         UpdateToDoFragment f = new UpdateToDoFragment();
@@ -38,19 +39,19 @@ public class UpdateToDoFragment extends DialogFragment {
         args.putLong("id", id);
         args.putString("description", description);
         args.putString("category", categories);
-        //added categories to args
         f.setArguments(args);
         return f;
     }
-//updating the interface with categories
+    //https://stackoverflow.com/questions/29547883/how-to-update-activity-when-dialog-is-closed
     public interface OnUpdateDialogCloseListener {
+
         void closeUpdateDialog(int year, int month, int day, String description, long id, String categories);
+    //OnDialogCloseListener listener;
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_to_do_adder, container, false);
         toDo = (EditText) view.findViewById(R.id.toDo);
-        //getting the spinner with referencde with its id
         spinner = (Spinner) view.findViewById(R.id.categories);
         dp = (DatePicker) view.findViewById(R.id.datePicker);
         add = (Button) view.findViewById(R.id.add);
@@ -61,14 +62,11 @@ public class UpdateToDoFragment extends DialogFragment {
         String description = getArguments().getString("description");
         dp.updateDate(year, month, day);
         toDo.setText(description);
-        //same as in addtodofragment file
-        //here also i am supplying the spinner with the array using an instance of ArrayAdapter:
-    // Create an ArrayAdapter using the string array and a default spinner layout
+        //Creating array adapter Returns a view for each object in a collection of data
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(),
                 R.array.arraylist_category, android.R.layout.simple_spinner_item);
-    // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    // Apply the adapter to the spinner
+    // Getting adapter for the spinner here.
         spinner.setAdapter(adapter);
 
         add.setText("Update");
@@ -77,7 +75,6 @@ public class UpdateToDoFragment extends DialogFragment {
             public void onClick(View v) {
                 UpdateToDoFragment.OnUpdateDialogCloseListener activity = (UpdateToDoFragment.OnUpdateDialogCloseListener) getActivity();
                 Log.d(TAG, "id: " + id);
-                //add spinner to closeupdatedialog
                 activity.closeUpdateDialog(dp.getYear(), dp.getMonth(), dp.getDayOfMonth(),
                         toDo.getText().toString(), id, spinner.getSelectedItem().toString());
                 UpdateToDoFragment.this.dismiss();

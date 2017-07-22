@@ -13,7 +13,7 @@
         android:layout_height="0dip"
         android:layout_weight=".1"
         android:layout_marginBottom="8dp"
-        android:hint="Enter To Do" />
+        android:hint="Enter TASK to do" />
     <!--Adding spinner -->
     <Spinner
         android:id="@+id/categories"

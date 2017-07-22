@@ -45,12 +45,15 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
         this.cursor = cursor;
         this.listener = listener;
     }
+    //https://stackoverflow.com/questions/31367599/how-to-update-recyclerview-adapter-data
+    //Refersh recycler view
     public void swapCursor(Cursor newCursor){
         if (cursor != null) cursor.close();
         cursor = newCursor;
+        //mAdapter.notifyDataSetChanged();
         if (newCursor != null) {
-            // Force the RecyclerView to refresh
             this.notifyDataSetChanged();
+            //http://sapandiwakar.in/pull-to-refresh-for-android-recyclerview-or-any-other-vertically-scrolling-view/
         }
     }
     class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -67,9 +70,6 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
         String status;
 
         long id;
-
-
-        //constructor for getting to do values in textview
         ItemHolder(View view) {
             super(view);
             descriptionTV = (TextView) view.findViewById(R.id.description);
@@ -83,14 +83,14 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
             id = cursor.getLong(cursor.getColumnIndex(Contract.TABLE_TODO._ID));
             Log.d(TAG, "deleting id: " + id);
 
-            //get data from database in strings
+            //To get all data
             dueDate = cursor.getString(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_DUE_DATE));
             description = cursor.getString(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_DESCRIPTION));
             category = cursor.getString(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_CATEGORIES));
             status = cursor.getString(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_TASK));
 
 
-            // setting values from database to textview
+         // Setting all values here for the text view.
             dueDateTV.setText(dueDate);
             descriptionTV.setText(description);
             categoryTV.setText(category);
@@ -99,7 +99,6 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
         @Override
         public void onClick(View v) {
             int pos = getAdapterPosition();
-            //adding category and task
             listener.onItemClick(pos, description, dueDate, id, category,status);
         }
     }
