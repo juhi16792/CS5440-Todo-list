@@ -1,14 +1,16 @@
 <resources>
     <string name="app_name">ToDoList</string>
+    <color name="white">#FFFFFF</color>
 
 
 
     <string-array name="arraylist_category">
         <item>all</item>
-        <item>place_to_visit</item>
-        <item>routine</item>
-        <item>official</item>
-        <item>medecines</item>
+        <item>gym</item>
+        <item>things_to_buy</item>
+        <item>Assignment_to_do</item>
+        <item>Travel_list</item>
+
     </string-array>
 
 

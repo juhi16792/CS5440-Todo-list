@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <!--menu for category-->
 <item android:id="@+id/item"
-    android:title="CLICK ME"
+    android:title="View list"
     app:showAsAction="always"
     android:orderInCategory="1"
     android:visible="true">
@@ -14,16 +14,16 @@
                 android:title="All" />
             <item
                 android:id="@+id/fav_place_to_visit"
-                android:title="place_to_visit" />
+                android:title="gym" />
             <item
                 android:id="@+id/routine"
-                android:title="routine" />
+                android:title="things_to_buy" />
             <item
                 android:id="@+id/official"
-                android:title="official" />
+                android:title="Assigments_to_do" />
             <item
                 android:id="@+id/medecines"
-                android:title="medecines" />
+                android:title="Travel_list" />
         </menu>
             </item>
         </menu>
